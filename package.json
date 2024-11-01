@@ -1,0 +1,16 @@
+{
+  "name": "one_million",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npx tailwindcss -o styles/output.css --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "chrome-types": "^0.1.313",
+    "typescript": "^5.6.3"
+  }
+}

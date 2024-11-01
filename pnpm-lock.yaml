@@ -1,0 +1,32 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    devDependencies:
+      chrome-types:
+        specifier: ^0.1.313
+        version: 0.1.313
+      typescript:
+        specifier: ^5.6.3
+        version: 5.6.3
+
+packages:
+
+  chrome-types@0.1.313:
+    resolution: {integrity: sha512-7CDRs+LmIxnhrBhBxs4MK6W93vxHwL8avFeB6ga1EXkXEm1ysGCAedM6qXcUmo2Bxpp2BAQPk1OgPGC3DTuekw==}
+
+  typescript@5.6.3:
+    resolution: {integrity: sha512-hjcS1mhfuyi4WW8IWtjP7brDrG2cuDZukyrYrSauoXGNgx0S7zceP07adYkJycEr56BOUTNPzbInooiN3fn1qw==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+
+snapshots:
+
+  chrome-types@0.1.313: {}
+
+  typescript@5.6.3: {}

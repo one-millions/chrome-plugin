@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "es6", // 将代码编译到 ES6 版本
+    "lib": ["dom", "es6"], // 包含 DOM 和 ES6 的类型定义
+    "module": "commonjs", // 使用 CommonJS 模块系统
+    "outDir": "./dist", // 输出文件夹
+    "rootDir": "./src", // 输入文件夹
+    "strict": true, // 启用所有严格类型检查
+    "esModuleInterop": true, // 允许 CommonJS 和 ES 模块间的兼容
+    "skipLibCheck": true, // 跳过库的类型检查
+    "forceConsistentCasingInFileNames": true, // 文件名大小写一致性
+    "types": ["chrome"] // 加载 chrome-types 类型定义
+  },
+  "include": ["./**/*.ts"], // 编译 src 文件夹下的所有 TypeScript 文件
+  "exclude": ["node_modules", "dist"] // 排除 node_modules 和 dist 文件夹
+}
