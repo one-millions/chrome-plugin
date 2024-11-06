@@ -18,12 +18,6 @@
   "action": {
     "default_title": "Click to open panel"
   },
-  // "content_scripts": [
-  //   {
-  //     "matches": ["<all_urls>"],
-  //     "js": ["dzdp.js"]
-  //   }
-  // ],
   "side_panel": {
     "default_path": "sidepanel.html"
   }

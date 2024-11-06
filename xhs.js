@@ -62,12 +62,3 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 initialize();
-
-window.addEventListener(
-  "message",
-  (event) => {
-    if (event.data.type && event.data.type === "FROM_PAGE")
-      console.log("message", event);
-  },
-  false
-);

@@ -1,66 +1,92 @@
-function initialize() {
-  const content = document.querySelector("#shop-all-list");
-  if (content != null) {
-    const sections = content.querySelectorAll("li");
-    const store = new Map();
+const searchList = document.querySelector("#shop-all-list");
+const notFound = document.querySelector(".not-found");
+const page = document.querySelector(".page .cur");
 
+if (searchList != null && notFound == null) {
+  const sections = searchList.querySelectorAll("li");
+  const store = new Map();
+
+  if (sections.length > 0) {
     for (let i = 0; i < sections.length; i++) {
       const section = sections[i];
-
       const image = section.querySelector("img");
+      const tag = section.querySelectorAll(".tag");
       const title = section.querySelector("h4");
-      const location = section.querySelectorAll(".tag");
+      const link = section.querySelector("a");
+      const key = link.getAttribute("data-shopid");
+      const url = link.getAttribute("href");
 
-      store.set(image.src, {
-        title: `${title.innerText}(${location[1].innerText})`,
+      store.set(key, {
+        title: title.innerText,
+        tag: tag[0].innerText,
         image: image.src,
+        url,
       });
     }
 
-    // 更新存储
-    chrome.storage.local.set({ items: [...store.values()] }, () => {
-      console.log("Image URLs updated11:", store.size);
+    chrome.runtime.sendMessage({
+      type: "updateSidebar",
+      data: [...store.values()],
     });
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  const mutationObserver = new MutationObserver(initialize);
-  console.log(4444, "xxxxstore");
-  //   const intersectionObserver = new IntersectionObserver(
-  //     (entries) => {
-  //       console.log("entries", entries);
-  //       // entries.forEach((entry) => {
-  //       //   if (entry.isIntersecting && !items.includes(entry.target.src)) {
-  //       //     items.push(entry.target.src);
+// 详情页
+const basicInfo = document.querySelector("#basic-info");
 
-  //       //     // 更新存储
-  //       //     chrome.storage.local.set({ items }, () => {
-  //       //       console.log("Image URL added on intersection:", entry.target.src);
-  //       //     });
-  //       //   }
-  //       // });
-  //     },
-  //     { root: null, rootMargin: "0px", threshold: 0.1 }
-  //   );
+if (basicInfo != null) {
+  const addressNode = basicInfo.querySelector(".map_address");
+  const phoneNode = basicInfo.querySelector(".tel");
+  const other = basicInfo.querySelector(".other");
+  const businessTimeNode = other.querySelector(".item");
+  const comment = document.querySelector("#reviewlist-wrapper");
+  const keywords = ["毛孩子", "宠物友好", "狗", "可带宠物"];
 
-  // 观察整个文档，监听 DOM 子节点和属性的变化
-  mutationObserver.observe(document.body, {
-    childList: true,
-    subtree: true,
+  const data = {
+    address: "",
+    phone: "",
+    businessTime: "",
+    comment: [],
+  };
+
+  data.address = addressNode.innerText;
+  data.businessTime = businessTimeNode.innerText;
+  data.phone = phoneNode.textContent.replace("电话：", "").trim();
+
+  const mutationObserver = new MutationObserver((mutationsList) => {
+    for (const mutation of mutationsList) {
+      if (mutation.type === "childList") {
+        const nodes = mutation.target.querySelectorAll(".comment-item");
+        for (let i = 0; i < nodes.length; i++) {
+          const node = nodes[i];
+          const descNode = node.querySelector(".desc");
+          const photoNode = node.querySelector(".photos");
+          const description = keywords.find(
+            (item) => descNode.innerText.indexOf(item) > -1
+          );
+          let urls = [];
+
+          if (photoNode != null) {
+            const photos = photoNode.querySelectorAll("img");
+            if (photos != null) {
+              urls = Array.from(photos).map((item) => item.src);
+            }
+          }
+
+          if (description != null) {
+            data.comment.push({
+              description: descNode.innerText,
+              photos: urls,
+            });
+          }
+        }
+      }
+
+      console.log("[res]", data);
+    }
   });
 
-  //   intersectionObserver.observe(document.body, {
-  //     childList: true,
-  //     subtree: true,
-  //   });
-});
-
-console.log(5);
-
-const mutationObserver = new MutationObserver(initialize);
-
-mutationObserver.observe(document.body, {
-  childList: true,
-  subtree: true,
-});
+  mutationObserver.observe(comment, {
+    childList: true, // 观察目标子节点的变化，是否有添加或者删除
+  });
+}
